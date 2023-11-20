@@ -53,9 +53,10 @@ def graphFrequency(problems):
 	x_ticks_labels = ['Sun','Mon','Tue','Wed', 'Thu', 'Fri', 'Sat']
 	plt.xticks(range(7), x_ticks_labels)
 	plt.title("Daily Difficulty")
-	ax.plot(range(7), freq['Hard'], color='#f8615c')
-	ax.plot(range(7), freq['Medium'], color='#fac31d')
-	ax.plot(range(7), freq['Easy'], color='#46c6c2')
+	hard, = ax.plot(range(7), freq['Hard'], color='#f8615c', label='Hard')
+	medium, = ax.plot(range(7), freq['Medium'], color='#fac31d', label='Medium')
+	easy, = ax.plot(range(7), freq['Easy'], color='#46c6c2', label='Easy')
+	ax.legend(handles=[hard, medium, easy])
     
 	pngImage = io.BytesIO()
 	FigureCanvas(fig).print_png(pngImage)
