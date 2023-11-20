@@ -1,0 +1,40 @@
+html {
+	height: 100%;
+}	
+
+body {
+	height: 97%;
+	background-color: #212121;
+	margin: 0;
+}
+
+
+.content {
+	width: 90%;
+	padding: 0;
+	margin:0;
+	margin-left: 5%;
+	height: calc(100% - 1em);
+	background-color: #3a4042;
+	
+	font-family: helvetica;
+	color: #8ecccc;
+}
+
+.child {
+	font-family: "Lucida Console", "Courier New", monospace;
+	float: left;
+	width: 50%;
+}
+
+#left {
+	/*background-color: fuchsia;*/
+}
+#right {
+	/*background-color: aqua;*/
+}
+
+h1 {
+	color: #50717b;
+}
+

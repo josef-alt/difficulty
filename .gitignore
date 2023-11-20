@@ -1,0 +1,5 @@
+.env
+venv/
+notes
+problems.gql
+__pycache__/
