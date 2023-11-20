@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
-
-    <title>Problem Difficulty</title>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
+	<title>Problem Difficulty</title>
 </head>
 <body>
 	<div class="content">
@@ -14,7 +14,6 @@
 		<div class="child" id="left">
 			<h1>Select date range</h1>
 				<form action="/query/" method="POST">
-
 					From 
 					<input type="date" id="start_date" name="start" min="2020-04-01" value="{{ request.form['start_date'] }}" />
 					to
@@ -30,10 +29,8 @@
 				<p>{{para}}</p>
 			{% endfor %}
 		</div>
-		
 	</div>
 	
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
 </body>
 </html>
