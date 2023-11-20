@@ -15,7 +15,7 @@
 			<h1>Select date range</h1>
 				<form action="/query/" method="POST">
 					From 
-					<input type="date" id="start_date" name="start" min="2020-04-01" value="{{ request.form['start_date'] }}" />
+					<input type="date" id="start_date" name="start" min="2020-04-01" />
 					to
 					<input type="date" id="end_date" name="end" min="2020-04-01" />
 				
@@ -25,9 +25,9 @@
 		
 		<div class="child" id="right">
 			<h1>Problems</h1>
-			{% for para in test_str %}
-				<p>{{para}}</p>
-			{% endfor %}
+			{% if daily_difficulty %}
+				<img src={{ daily_difficulty }}>
+			{% endif %}
 		</div>
 	</div>
 	
