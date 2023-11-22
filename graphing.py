@@ -10,6 +10,13 @@ color_E = '#46c6c2'
 color_M = '#fac31d'
 color_H = '#f8615c'
 
+def figToBase64(fig):
+	pngImage = io.BytesIO()
+	FigureCanvas(fig).print_png(pngImage)
+	pngImageB64String = 'data:image/png;base64,'
+	pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+	return pngImageB64String
+
 def partition(probs):
 	diff = { 'Easy': [], 'Medium': [], 'Hard': []}
 	for prob in probs:
@@ -34,6 +41,7 @@ def graphAC(problems):
 	medium, = plot(ax, [prob['date'] for prob in dm], [prob['acRate'] for prob in dm], color_M, 'Medium')
 	easy, = plot(ax, [prob['date'] for prob in de], [prob['acRate'] for prob in de], color_E, 'Easy')
 	ax.legend(handles=[hard, medium, easy])
+	
 	ticks = ax.xaxis.get_major_ticks()
 	n_ticks = len(ticks)
 	if n_ticks > 10:
@@ -43,11 +51,7 @@ def graphAC(problems):
 				ticks[i].set_visible(False)
 	plt.gcf().autofmt_xdate()
 
-	pngImage = io.BytesIO()
-	FigureCanvas(fig).print_png(pngImage)
-	pngImageB64String = 'data:image/png;base64,'
-	pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-	return pngImageB64String
+	return figToBase64(fig)
 
 def graphFrequency(problems):
 	data = partition(problems)
@@ -70,8 +74,4 @@ def graphFrequency(problems):
 	easy, = plot(ax, range(7), freq['Easy'], color_E, 'Easy')
 	ax.legend(handles=[hard, medium, easy])
     
-	pngImage = io.BytesIO()
-	FigureCanvas(fig).print_png(pngImage)
-	pngImageB64String = 'data:image/png;base64,'
-	pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-	return pngImageB64String
+	return figToBase64(fig)
