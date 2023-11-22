@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import requests
 import json
 
@@ -12,17 +12,18 @@ class DBConnection:
 	
 	def dateInRange(self, date, start, end):
 		data = date.split('-')
-		d = datetime.datetime(int(data[0]), int(data[1]), int(data[2]))
-		s = datetime.datetime(start[0], start[1], start[2])
-		e = datetime.datetime(end[0], end[1], end[2])
+		d = datetime(int(data[0]), int(data[1]), int(data[2]))
+		s = datetime(start[0], start[1], start[2])
+		e = datetime(end[0], end[1], end[2])
 		return d >= s and d <= e
 	
 	def filter_fields(self, problem):
 		new_prob = {}
 		d = problem['date'].split('-')
+		new_prob['date'] = datetime.strptime(problem['date'], '%Y-%m-%d').date() #problem['date']
 		new_prob['difficulty'] = problem['question']['difficulty']
 		new_prob['acRate'] = problem['question']['acRate']
-		new_prob['day'] = datetime.datetime(int(d[0]), int(d[1]), int(d[2])).strftime('%w')
+		new_prob['day'] = datetime(int(d[0]), int(d[1]), int(d[2])).strftime('%w')
 		return new_prob
 		
 	def query(self, variables):

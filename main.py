@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 import os
 
 import DBConnection
-from graphing import graphFrequency
-
+from graphing import graphFrequency, graphAC
 
 load_dotenv()
 app = Flask(__name__)
@@ -60,7 +59,7 @@ def query():
 				break
 		year += 1
 	
-	return render_template('index.html', daily_difficulty=graphFrequency(problems))
+	return render_template('index.html', daily_difficulty=graphFrequency(problems), ac_rate=graphAC(problems))
 
 if __name__ == "__main__":	
 	app.run(host=os.getenv('HOST'), port=os.getenv('PORT'), debug=True)
