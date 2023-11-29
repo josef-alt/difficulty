@@ -10,7 +10,7 @@ class DBConnection:
 		with open(queryFile) as file:
 			return file.read()
 
-	def dateInRange(self, date, start, end):
+	def date_in_range(self, date, start, end):
 		d = datetime.strptime(date, '%Y-%m-%d').date()
 		return d >= start and d <= end
 	
@@ -22,16 +22,19 @@ class DBConnection:
 		new_prob['acRate'] = problem['question']['acRate']
 		new_prob['day'] = datetime(int(d[0]), int(d[1]), int(d[2])).strftime('%w')
 		return new_prob
+
+	def flatten_data(self, data):
+		return data['data']['dailyCodingChallengeV2']['challenges']
 		
 	def query(self, variables, after, before):
 		params = { "query": self.query_string, "variables": variables }
 		response = requests.post(url=self.url, json=params)
 		if response.status_code == 200:
-			data = json.loads(response.content)['data']['dailyCodingChallengeV2']['challenges']
+			data = self.flatten_data(json.loads(response.content))
 			
 			output = []
 			for p in data:
-				if self.dateInRange(p['date'], after, before):
+				if self.date_in_range(p['date'], after, before):
 					output.append(self.filter_fields(p))
 			return output
 		raise Exception("Query failed")

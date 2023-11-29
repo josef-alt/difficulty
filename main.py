@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 import DBConnection
-from graphing import graphFrequency, graphAC
+from graphing import graph_frequency, graph_ac
 
 load_dotenv()
 app = Flask(__name__)
@@ -19,22 +19,22 @@ def query():
 	if not request.form.get('start') or not request.form.get('end'):
 		return render_template('index.html')
 
-	strt = datetime.strptime(request.form.get('start'), '%Y-%m-%d').date()
-	endd = datetime.strptime(request.form.get('end'), '%Y-%m-%d').date()
+	start_date = datetime.strptime(request.form.get('start'), '%Y-%m-%d').date()
+	end_date = datetime.strptime(request.form.get('end'), '%Y-%m-%d').date()
 		
 	variables = {}
 	problems = []
 	
-	year = strt.year
-	month = strt.month
-	while year <= endd.year:
-		while (month <= endd.month) or (year != endd.year):
+	year = start_date.year
+	month = start_date.month
+	while year <= end_date.year:
+		while (month <= end_date.month) or (year != end_date.year):
 			print('query', month, year)
 			variables['year'] = year
 			variables['month'] = month
 			
 			try:
-				response = db.query(variables, strt, endd)
+				response = db.query(variables, start_date, end_date)
 				if response:
 					problems.extend(response)
 			except Exception as e:
@@ -46,7 +46,7 @@ def query():
 				break
 		year += 1
 	
-	return render_template('index.html', daily_difficulty=graphFrequency(problems), ac_rate=graphAC(problems))
+	return render_template('index.html', daily_difficulty=graph_frequency(problems), ac_rate=graph_ac(problems))
 
 if __name__ == "__main__":	
 	app.run(host=os.getenv('HOST'), port=os.getenv('PORT'), debug=True)

@@ -6,16 +6,16 @@ from numpy import linspace
 import io
 import base64
 
-color_E = '#46c6c2'
-color_M = '#fac31d'
-color_H = '#f8615c'
+COLOR_E = '#46c6c2'
+COLOR_M = '#fac31d'
+COLOR_H = '#f8615c'
 
-def figToBase64(fig):
-	pngImage = io.BytesIO()
-	FigureCanvas(fig).print_png(pngImage)
-	pngImageB64String = 'data:image/png;base64,'
-	pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-	return pngImageB64String
+def fig_to_base64(fig):
+	png_image = io.BytesIO()
+	FigureCanvas(fig).print_png(png_image)
+	png_b64 = 'data:image/png;base64,'
+	png_b64 += base64.b64encode(png_image.getvalue()).decode('utf8')
+	return png_b64
 
 def partition(probs):
 	diff = { 'Easy': [], 'Medium': [], 'Hard': []}
@@ -23,10 +23,12 @@ def partition(probs):
 		diff[prob['difficulty']].append(prob)    
 	return diff
 
-def plot(ax, x, y, color, label):
-	return ax.plot(x, y, marker='o', markersize=4, color=color, label=label)
+def plot(ax, x, y, color, label, mark=False):
+	if mark:
+		return ax.plot(x, y, marker='o', markersize=4, color=color, label=label)
+	return ax.plot(x, y, color=color, label=label)
 
-def graphAC(problems):
+def graph_ac(problems):
 	plt.switch_backend('agg')
 	fig, ax = plt.subplots(figsize=(5, 4))
 	plt.title('AC Rate')
@@ -37,9 +39,9 @@ def graphAC(problems):
 	dh = data['Hard']
 	dm = data['Medium']
 	de = data['Easy']
-	hard, = plot(ax, [prob['date'] for prob in dh], [prob['acRate'] for prob in dh], color_H, 'Hard')
-	medium, = plot(ax, [prob['date'] for prob in dm], [prob['acRate'] for prob in dm], color_M, 'Medium')
-	easy, = plot(ax, [prob['date'] for prob in de], [prob['acRate'] for prob in de], color_E, 'Easy')
+	hard, = plot(ax, [prob['date'] for prob in dh], [prob['acRate'] for prob in dh], COLOR_H, 'Hard', True)
+	medium, = plot(ax, [prob['date'] for prob in dm], [prob['acRate'] for prob in dm], COLOR_M, 'Medium', True)
+	easy, = plot(ax, [prob['date'] for prob in de], [prob['acRate'] for prob in de], COLOR_E, 'Easy', True)
 	ax.legend(handles=[hard, medium, easy])
 	
 	ticks = ax.xaxis.get_major_ticks()
@@ -51,9 +53,9 @@ def graphAC(problems):
 				ticks[i].set_visible(False)
 	plt.gcf().autofmt_xdate()
 
-	return figToBase64(fig)
+	return fig_to_base64(fig)
 
-def graphFrequency(problems):
+def graph_frequency(problems):
 	data = partition(problems)
 	freq = { 'Hard': [], 'Medium': [], 'Easy': []}
 	for diff in freq.keys():
@@ -69,9 +71,9 @@ def graphFrequency(problems):
 	x_ticks_labels = ['Sun','Mon','Tue','Wed', 'Thu', 'Fri', 'Sat']
 	plt.xticks(range(7), x_ticks_labels)
 	plt.title('Daily Difficulty')
-	hard, = plot(ax, range(7), freq['Hard'], color_H, 'Hard')
-	medium, = plot(ax, range(7), freq['Medium'], color_M, 'Medium')
-	easy, = plot(ax, range(7), freq['Easy'], color_E, 'Easy')
+	hard, = plot(ax, range(7), freq['Hard'], COLOR_H, 'Hard')
+	medium, = plot(ax, range(7), freq['Medium'], COLOR_M, 'Medium')
+	easy, = plot(ax, range(7), freq['Easy'], COLOR_E, 'Easy')
 	ax.legend(handles=[hard, medium, easy])
     
-	return figToBase64(fig)
+	return fig_to_base64(fig)
