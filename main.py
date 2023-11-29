@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
+from datetime import datetime
 import os
 
 import DBConnection
@@ -17,42 +18,28 @@ def index():
 def query():
 	if not request.form.get('start') or not request.form.get('end'):
 		return render_template('index.html')
+
+	strt = datetime.strptime(request.form.get('start'), '%Y-%m-%d').date()
+	endd = datetime.strptime(request.form.get('end'), '%Y-%m-%d').date()
 		
-	startDate = request.form.get('start').split('-')
-	endDate = request.form.get('end').split('-')
-	startY = int(startDate[0])
-	startM = int(startDate[1])
-	startD = int(startDate[2])
-	endY = int(endDate[0])
-	endM = int(endDate[1])
-	endD = int(endDate[2])
-	variables = { 
-		'startY': startY, 
-		'startM': startM, 
-		'startD': startD, 
-		'endY': endY,
-		'endM': endM,
-		'endD': endD 
-	}
-	
+	variables = {}
 	problems = []
 	
-	year = startY
-	month = startM
-	while year <= endY:
-		while (month <= endM) or (year != endY):
+	year = strt.year
+	month = strt.month
+	while year <= endd.year:
+		while (month <= endd.month) or (year != endd.year):
 			print('query', month, year)
 			variables['year'] = year
 			variables['month'] = month
 			
 			try:
-				response = db.query(variables)
+				response = db.query(variables, strt, endd)
 				if response:
 					problems.extend(response)
 			except Exception as e:
 				print('Something went wrong', e)
 				
-			
 			month += 1
 			if month == 13:
 				month = 1

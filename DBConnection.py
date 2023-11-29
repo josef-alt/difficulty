@@ -9,13 +9,10 @@ class DBConnection:
 	def load_query(self, queryFile):
 		with open(queryFile) as file:
 			return file.read()
-	
+
 	def dateInRange(self, date, start, end):
-		data = date.split('-')
-		d = datetime(int(data[0]), int(data[1]), int(data[2]))
-		s = datetime(start[0], start[1], start[2])
-		e = datetime(end[0], end[1], end[2])
-		return d >= s and d <= e
+		d = datetime.strptime(date, '%Y-%m-%d').date()
+		return d >= start and d <= end
 	
 	def filter_fields(self, problem):
 		new_prob = {}
@@ -26,14 +23,7 @@ class DBConnection:
 		new_prob['day'] = datetime(int(d[0]), int(d[1]), int(d[2])).strftime('%w')
 		return new_prob
 		
-	def query(self, variables):
-		startD = int(variables['startD'])
-		startM = int(variables['startM'])
-		startY = int(variables['startY'])
-		endD = int(variables['endD'])
-		endM = int(variables['endM'])
-		endY = int(variables['endY'])
-		
+	def query(self, variables, after, before):
 		params = { "query": self.query_string, "variables": variables }
 		response = requests.post(url=self.url, json=params)
 		if response.status_code == 200:
@@ -41,7 +31,7 @@ class DBConnection:
 			
 			output = []
 			for p in data:
-				if self.dateInRange(p['date'], (startY, startM, startD), (endY, endM, endD)):
+				if self.dateInRange(p['date'], after, before):
 					output.append(self.filter_fields(p))
 			return output
 		raise Exception("Query failed")
