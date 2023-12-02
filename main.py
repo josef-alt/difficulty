@@ -21,8 +21,6 @@ def query():
 
 	start_date = datetime.strptime(request.form.get('start'), '%Y-%m-%d').date()
 	end_date = datetime.strptime(request.form.get('end'), '%Y-%m-%d').date()
-	
-	print(request.form)
 	plots_data = { 
 		'Easy': request.form.get('plot_easy') == 'on', 
 		'Medium': request.form.get('plot_medium') == 'on', 
