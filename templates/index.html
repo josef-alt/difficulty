@@ -20,7 +20,25 @@
 					<input type="date" id="end_date" name="end" min="2020-04-01" />
 				
 					<button name="query_button" type="submit">Go</button>
+					</br></br>
+					
+					Data options</br>
+					<input type="checkbox" id="plot_easy" name="plot_easy">
+					<label for="plot_easy">Easy</label></br>
+					<input type="checkbox" id="plot_medium" name="plot_medium">
+					<label for="plot_easy">Medium</label></br>
+					<input type="checkbox" id="plot_hard" name="plot_hard">
+					<label for="plot_easy">Hard</label></br>
+					
+					Graph options</br>
+					<input type="checkbox" id="ac_running_average" name="ac_running_average">
+					<label for="plot_easy">Show Running Average</label></br>
+					
 				</form>
+				
+			{% if g2 %}
+				<img src={{ g2 }}>
+			{% endif %}
 		</div>
 		
 		<div class="child" id="right">
@@ -31,6 +49,7 @@
 			{% if ac_rate %}
 				<img src={{ ac_rate }}>
 			{% endif %}
+			
 		</div>
 	</div>
 	

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
-from numpy import linspace
+from numpy import linspace, average
 import io
 import base64
 
@@ -23,26 +23,37 @@ def partition(probs):
 		diff[prob['difficulty']].append(prob)    
 	return diff
 
-def plot(ax, x, y, color, label, mark=False):
+def plot(ax, x, y, color, label, mark=False, solid=True):
+	style = 'solid' if solid else 'dashed'
 	if mark:
-		return ax.plot(x, y, marker='o', markersize=4, color=color, label=label)
-	return ax.plot(x, y, color=color, label=label)
+		return ax.plot(x, y, marker='o', markersize=4, color=color, label=label, linestyle=style)
+	return ax.plot(x, y, color=color, label=label, linestyle=style)
 
-def graph_ac(problems):
+def ac_plot_helper(data, key, ax, color, ac_running_average):
+	dk = data[key]
+	plt, = plot(ax, [p['date'] for p in dk], [p['acRate'] for p in dk], color, key, True)
+	if ac_running_average:
+		running_average = [p['acRate'] for p in dk]
+		running_average = [average(running_average[:i]) for i in range(1, len(running_average) + 1)]
+		avg_plt, = plot(ax, [p['date'] for p in dk], running_average, color, (key + ' avg'), mark=True, solid=False)
+	return plt
+
+def graph_ac(problems, plots_data):
 	plt.switch_backend('agg')
 	fig, ax = plt.subplots(figsize=(5, 4))
 	plt.title('AC Rate')
 	plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
 	plt.gca().xaxis.set_major_locator(mdates.DayLocator())
 	
-	data = partition(problems)	
-	dh = data['Hard']
-	dm = data['Medium']
-	de = data['Easy']
-	hard, = plot(ax, [prob['date'] for prob in dh], [prob['acRate'] for prob in dh], COLOR_H, 'Hard', True)
-	medium, = plot(ax, [prob['date'] for prob in dm], [prob['acRate'] for prob in dm], COLOR_M, 'Medium', True)
-	easy, = plot(ax, [prob['date'] for prob in de], [prob['acRate'] for prob in de], COLOR_E, 'Easy', True)
-	ax.legend(handles=[hard, medium, easy])
+	data = partition(problems)
+	handles = []
+	if plots_data['Hard']:
+		handles.append(ac_plot_helper(data, 'Hard', ax, COLOR_H, plots_data['ac_running_average']))
+	if plots_data['Medium']:
+		handles.append(ac_plot_helper(data, 'Medium', ax, COLOR_M, plots_data['ac_running_average']))
+	if plots_data['Easy']:
+		handles.append(ac_plot_helper(data, 'Easy', ax, COLOR_E, plots_data['ac_running_average']))
+	ax.legend(handles=handles)	
 	
 	ticks = ax.xaxis.get_major_ticks()
 	n_ticks = len(ticks)
@@ -55,7 +66,7 @@ def graph_ac(problems):
 
 	return fig_to_base64(fig)
 
-def graph_frequency(problems):
+def graph_frequency(problems, plots_data):
 	data = partition(problems)
 	freq = { 'Hard': [], 'Medium': [], 'Easy': []}
 	for diff in freq.keys():

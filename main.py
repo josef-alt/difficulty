@@ -21,7 +21,15 @@ def query():
 
 	start_date = datetime.strptime(request.form.get('start'), '%Y-%m-%d').date()
 	end_date = datetime.strptime(request.form.get('end'), '%Y-%m-%d').date()
-		
+	
+	print(request.form)
+	plots_data = { 
+		'Easy': request.form.get('plot_easy') == 'on', 
+		'Medium': request.form.get('plot_medium') == 'on', 
+		'Hard': request.form.get('plot_hard') == 'on',
+		'ac_running_average': request.form.get('ac_running_average') == 'on'
+	}
+	
 	variables = {}
 	problems = []
 	
@@ -46,7 +54,7 @@ def query():
 				break
 		year += 1
 	
-	return render_template('index.html', daily_difficulty=graph_frequency(problems), ac_rate=graph_ac(problems))
+	return render_template('index.html', daily_difficulty=graph_frequency(problems, plots_data), ac_rate=graph_ac(problems, plots_data))
 
 if __name__ == "__main__":	
 	app.run(host=os.getenv('HOST'), port=os.getenv('PORT'), debug=True)
