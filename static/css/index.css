@@ -1,22 +1,23 @@
 html {
 	height: 100%;
+	min-width: 900px;
+	min-height: 520px;
 }	
 
 body {
-	height: 97%;
+	height: calc(100% - 1.5em);
 	background-color: #212121;
 	margin: 0;
+	
 }
 
-
 .content {
-	width: 90%;
+	width: 95%;
 	padding: 0;
 	margin:0;
-	margin-left: 5%;
+	margin-left: 2.5%;
 	height: calc(100% - 1em);
 	background-color: #3a4042;
-	
 	font-family: helvetica;
 	color: #8ecccc;
 }
@@ -24,17 +25,32 @@ body {
 .child {
 	font-family: "Lucida Console", "Courier New", monospace;
 	float: left;
-	width: 50%;
+}
+
+.inline_mono {
+	font-family: "Lucida Console", "Courier New", monospace;
+	display: inline;
 }
 
 #left {
-	/*background-color: fuchsia;*/
+	width: 30%;
+	min-width: 100px;
 }
 #right {
-	/*background-color: aqua;*/
+	width: 70%;
 }
 
 h1 {
 	color: #50717b;
 }
 
+a.none {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+img {
+	min-width: 47.5%;
+	max-width: 32vw;
+	max-height: 57vh;
+}

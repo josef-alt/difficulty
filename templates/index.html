@@ -14,14 +14,12 @@
 		<div class="child" id="left">
 			<h1>Select date</h1>
 				<form action="/query/" method="POST">
-					From 
-					<input type="date" id="start_date" name="start" min="2020-04-01" />
-					to
-					<input type="date" id="end_date" name="end" min="2020-04-01" />
-				
-					<button name="query_button" type="submit">Go</button>
-					</br></br>
+					<pre class="inline_mono">From </pre>
+					<input type="date" id="start_date" name="start" min="2020-04-01" /></br>
+					<pre class="inline_mono">to   </pre>
+					<input type="date" id="end_date" name="end" min="2020-04-01" /></br>
 					
+					</br>
 					Data options</br>
 					<input type="checkbox" id="plot_easy" name="plot_easy">
 					<label for="plot_easy">Easy</label></br>
@@ -30,9 +28,13 @@
 					<input type="checkbox" id="plot_hard" name="plot_hard">
 					<label for="plot_easy">Hard</label></br>
 					
+					</br>
 					Graph options</br>
 					<input type="checkbox" id="ac_running_average" name="ac_running_average">
 					<label for="plot_easy">Show Running Average</label></br>
+					
+					</br>
+					<button name="query_button" type="submit">Go</button>
 				</form>
 		</div>
 		
