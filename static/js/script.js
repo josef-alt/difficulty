@@ -1,3 +1,7 @@
+// script for setting the upper limit on date input fields
+// as far as I can tell, you cannot set them to 'today'
+// without javascript
+
 var today = new Date();
 var dd = today.getDate();
 var mm = today.getMonth() + 1;

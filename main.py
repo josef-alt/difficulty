@@ -10,15 +10,19 @@ load_dotenv()
 app = Flask(__name__)
 db = DBConnection.DBConnection(os.getenv('URL'), os.getenv('QUERY_FILE'))
 
+# simple home page route
 @app.route("/", methods=['GET'])
 def index():
 	return render_template('index.html')
 
+# retrieve problem data
 @app.route("/query/", methods=['POST'])
 def query():
+	# filter out incomplete requests
 	if not request.form.get('start') or not request.form.get('end'):
 		return render_template('index.html')
 
+	# parse filter data
 	start_date = datetime.strptime(request.form.get('start'), '%Y-%m-%d').date()
 	end_date = datetime.strptime(request.form.get('end'), '%Y-%m-%d').date()
 	plots_data = { 
@@ -39,6 +43,8 @@ def query():
 			variables['year'] = year
 			variables['month'] = month
 			
+			# attempt to retrieve problem data
+			# TODO - exception handling
 			try:
 				response = db.query(variables, start_date, end_date)
 				if response:
@@ -46,6 +52,7 @@ def query():
 			except Exception as e:
 				print('Something went wrong', e)
 				
+			# increment and roll over to next year
 			month += 1
 			if month == 13:
 				month = 1
